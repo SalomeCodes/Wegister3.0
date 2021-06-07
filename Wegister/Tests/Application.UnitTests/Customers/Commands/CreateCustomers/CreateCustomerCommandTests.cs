@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
+using Application.Common.Dtos;
 using Application.Customers.Commands.CreateCustomer;
 using Application.UnitTests.Common;
 using MediatR;
@@ -23,7 +24,7 @@ namespace Application.UnitTests.Customers.Commands.CreateCustomers
             var result = sut.Handle(new CreateCustomerCommand(), CancellationToken.None);
 
             // Assert
-            mediatorMock.Verify(m => m.Publish(It.IsAny<CustomerCreated>(), It.IsAny<CancellationToken>()), Times.Once);
+            mediatorMock.Verify(m => m.Publish(It.IsAny<CustomerLookupDto>(), It.IsAny<CancellationToken>()), Times.Once);
             Context.Customers.ToList().Count.ShouldBe(3);
         }
     }

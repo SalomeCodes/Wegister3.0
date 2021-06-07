@@ -9,7 +9,7 @@ namespace Application.Common.Factories
 {
     internal class ItemFactory : IItemFactory
     {
-        public ItemListVm Create()
+        public static ItemListVm Create()
         {
             return new ItemListVm()
             {
@@ -27,6 +27,16 @@ namespace Application.Common.Factories
             }
 
             return returnValue;
+        }
+
+        ItemLookupDto IItemFactory.CreateLookUpDto(Item item)
+        {
+            return new ItemLookupDto()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Price = item.Price
+            };
         }
 
         public Item Create(CreateItemCommand entity)
@@ -47,8 +57,8 @@ namespace Application.Common.Factories
         {
             if (entity != null)
                 return new ItemCreated(entity.Id);
-            else
-                return null;
+
+            return null;
         }
     }
 }

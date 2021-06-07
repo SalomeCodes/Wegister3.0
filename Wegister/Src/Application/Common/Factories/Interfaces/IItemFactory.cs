@@ -11,5 +11,6 @@ namespace Application.Common.Factories.Interfaces
         IFactory<Item, ItemCreated>, 
         IFactory<List<ItemLookupDto>, ItemListVm>
     {
+        public ItemLookupDto CreateLookUpDto(Item item);
     }
 }

@@ -17,6 +17,9 @@ namespace Wegister.WebApi
     public class Startup
     {
         private IServiceCollection _services;
+        readonly string developmentOrigins = "_developmentOrigins";
+        readonly string origins = "_origins";
+
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
@@ -28,14 +31,40 @@ namespace Wegister.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            
+
             services.AddPersistence(Configuration);
             services.AddInfrastructure();
             services.AddApplication();
 
-            if(Environment.IsDevelopment())
+            if (Environment.IsDevelopment())
+            {
                 services.AddScoped<ICurrentUserService, CurrentUserServiceDev>();
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(name: developmentOrigins,
+                                      builder =>
+                                      {
+                                          builder.AllowAnyOrigin()
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                                      });
+                });
+            }
             else
+            {
                 services.AddScoped<ICurrentUserService, CurrentUserService>();
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(name: origins,
+                                      builder =>
+                                      {
+                                          builder.WithOrigins("")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                                      });
+                });
+            }
 
             services.AddAuthorization(x =>
             {
@@ -53,6 +82,7 @@ namespace Wegister.WebApi
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+
             _services = services;
         }
 
@@ -68,6 +98,11 @@ namespace Wegister.WebApi
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wegister API V1");
                 });
+                app.UseCors(developmentOrigins);
+            }
+            else
+            {
+                app.UseCors(origins);
             }
 
             app.UseHttpsRedirection();

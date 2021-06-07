@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Common;
@@ -63,6 +64,20 @@ namespace Persistence.IntegrationTests
                 Price = 2.50m,
                 Unit = "Uur",
                 CompanyId = _companyId
+            });
+
+            _sut.WorkHours.Add(new WorkHour()
+            {
+                Id = 1,
+                StartTime = _dateTime,
+                EndTime = _dateTime.AddMinutes(20),
+                RecreationInMinutes = 10,
+                TotalWorkHoursInMinutes = 10,
+                Employer = _sut.Employers.FirstOrDefault(),
+                User = new User()
+                {
+
+                }
             });
 
             _sut.SaveChanges();
@@ -137,6 +152,46 @@ namespace Persistence.IntegrationTests
             item.LastModified.ShouldNotBeNull();
             item.LastModified.ShouldBe(_dateTime);
             item.LastModifiedBy.ShouldBe(_userId);
+        }
+
+        [Fact]
+        public async Task SaveChangesAsync_GivenNewWorkHour_ShouldSetCreatedProperties()
+        {
+            var workHour = new WorkHour()
+            {
+                Id = 2,
+                StartTime = _dateTime,
+                EndTime = _dateTime.AddMinutes(20),
+                RecreationInMinutes = 10,
+                TotalWorkHoursInMinutes = 10,
+                Employer = _sut.Employers.FirstOrDefault(),
+                User = new User()
+                {
+
+                }
+            };
+
+            _sut.WorkHours.Add(workHour);
+
+            await _sut.SaveChangesAsync();
+
+            workHour.Created.ShouldBe(_dateTime);
+            workHour.CreatedBy.ShouldBe(_userId);
+            workHour.CompanyId.ShouldBe(_companyId);
+        }
+
+        [Fact]
+        public async Task SaveChangesAsync_GivenExistingWorkHour_ShouldSetLastModifiedProperties()
+        {
+            var workHour = await _sut.WorkHours.FindAsync(1);
+
+            workHour.EndTime = _dateTime.AddMinutes(21);
+
+            await _sut.SaveChangesAsync();
+
+            workHour.LastModified.ShouldNotBeNull();
+            workHour.LastModified.ShouldBe(_dateTime);
+            workHour.LastModifiedBy.ShouldBe(_userId);
         }
 
         public void Dispose()

@@ -11,5 +11,6 @@ namespace Application.Common.Factories.Interfaces
         IFactory<Customer, CustomerCreated>, 
         IFactory<List<CustomerLookupDto>, CustomerListVm>
     {
+        public CustomerLookupDto CreateLookUpDto(Customer customer);
     }
 }

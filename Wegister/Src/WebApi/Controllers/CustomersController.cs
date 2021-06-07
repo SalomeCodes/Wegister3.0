@@ -23,7 +23,7 @@ namespace WebApi.Controllers
 
             var response = await Mediator.Send(new GetCustomersListQuery());
 
-            return Ok(response);
+            return Ok(response.Customers);
         }
 
         [HttpPost]

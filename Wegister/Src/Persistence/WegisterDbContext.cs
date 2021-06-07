@@ -29,6 +29,9 @@ namespace Persistence
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<Employer> Employers { get; set; }
+        public DbSet<WorkHour> WorkHours { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

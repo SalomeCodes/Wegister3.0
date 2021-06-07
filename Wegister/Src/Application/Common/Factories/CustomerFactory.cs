@@ -3,7 +3,6 @@ using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Customers.Commands.CreateCustomer;
-using Application.Items.Commands.CreateItem;
 using Domain.Entities;
 
 namespace Application.Common.Factories
@@ -20,6 +19,16 @@ namespace Application.Common.Factories
             }
 
             return returnValue;
+        }
+
+        CustomerLookupDto ICustomerFactory.CreateLookUpDto(Customer customer)
+        {
+            return new CustomerLookupDto()
+            {
+                Id = customer.Id,
+                Name = customer.Name,
+                Email = customer.Email
+            };
         }
 
         public Customer Create(CreateCustomerCommand entity)
@@ -44,8 +53,8 @@ namespace Application.Common.Factories
         {
             if (entity != null)
                 return new CustomerCreated(entity.Id);
-            else
-                return null;
+
+            return null;
         }
     }
 }

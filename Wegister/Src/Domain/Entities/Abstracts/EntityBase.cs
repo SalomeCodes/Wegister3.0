@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Domain.Entities.Abstracts
+﻿namespace Domain.Entities.Abstracts
 {
     public abstract class EntityBase
     {

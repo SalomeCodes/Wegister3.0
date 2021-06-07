@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
@@ -24,12 +23,7 @@ namespace Application.Items.Queries.GetItemsList
         public async Task<ItemListVm> Handle(GetItemsListQuery request, CancellationToken cancellationToken)
         {
             var items = await _context.Items
-                .Select(i => new ItemLookupDto()
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    Price = i.Price
-                })
+                .Select(i => _factory.CreateLookUpDto(i))
                 .ToListAsync(cancellationToken);
 
             return _factory.Create(items);

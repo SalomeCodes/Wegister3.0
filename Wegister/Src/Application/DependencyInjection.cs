@@ -15,6 +15,8 @@ namespace Application
             //TODO: Load dynamically 
             services.AddTransient<ICustomerFactory, CustomerFactory>();
             services.AddTransient<IItemFactory, ItemFactory>();
+            services.AddTransient<IWorkHourFactory, WorkHourFactory>();
+            services.AddTransient<IEmployerFactory, EmployerFactory>();
 
             return services;
         }

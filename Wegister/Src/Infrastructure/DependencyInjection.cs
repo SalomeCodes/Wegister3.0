@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces;
 using Common;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure

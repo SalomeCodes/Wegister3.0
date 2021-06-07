@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
@@ -24,12 +23,7 @@ namespace Application.Customers.Queries.GetCustomersList
         public async Task<CustomerListVm> Handle(GetCustomersListQuery request, CancellationToken cancellationToken)
         {
             var customers = await _context.Customers
-                .Select(c => new CustomerLookupDto()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Email = c.Email
-                })
+                .Select(c => _factory.CreateLookUpDto(c))
                 .ToListAsync(cancellationToken);
 
             return _factory.Create(customers);
